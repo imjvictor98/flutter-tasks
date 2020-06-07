@@ -20,7 +20,7 @@ class TaskScreenState extends State<TaskScreen> {
   String _title;
   String _description;
   DateTime _deadLine;
-  bool _done = true;
+  bool _done = false;
 
   FocusNode _focusTitle;
   FocusNode _focusDescription;
