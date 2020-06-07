@@ -20,7 +20,7 @@ class TaskScreenState extends State<TaskScreen> {
   String _title;
   String _description;
   DateTime _deadLine;
-  bool _done = false;
+  bool _done = true;
 
   FocusNode _focusTitle;
   FocusNode _focusDescription;
@@ -48,6 +48,7 @@ class TaskScreenState extends State<TaskScreen> {
     }
     
     Task _task = Task(
+      id: _taskService.taskStore.tasks.length + 1,
       title: this._title,
       description: this._description,
       deadLine: this._deadLine,
