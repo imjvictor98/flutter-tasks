@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:task/models/Task/task.dart';
+import 'package:task/services/TaskService.dart';
 import 'package:task/services/UserService.dart';
 import 'package:task/utils/date_time_form.dart';
 
@@ -13,7 +15,7 @@ class TaskScreen extends StatefulWidget {
 class TaskScreenState extends State<TaskScreen> {
   final _formKey = GlobalKey<FormState>();
   UserService _userService;
-  //Implement the taskServie
+  TaskService _taskService;
 
   String _title;
   String _description;
@@ -44,13 +46,24 @@ class TaskScreenState extends State<TaskScreen> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
     }
-  }
+    
+    Task _task = Task(
+      title: this._title,
+      description: this._description,
+      deadLine: this._deadLine,
+      done: this._done
+    );
 
+    this._taskService.saveTask(_task).then((value) {
+      print("Atividade adicionada"); //Substituir pelo toast
+      Navigator.of(context).pop();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     _userService = Provider.of<UserService>(context);
-    //Implement task definiton  
+    _taskService = Provider.of<TaskService>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -63,7 +76,7 @@ class TaskScreenState extends State<TaskScreen> {
           backgroundColor: Color.fromRGBO(0, 156, 118, 1),
           elevation: 5,
       ),
-      body: Column(
+      body: Column(        
         children: <Widget>[
           Form(
             key: _formKey,
@@ -78,6 +91,11 @@ class TaskScreenState extends State<TaskScreen> {
                     textInputAction: TextInputAction.next,
                     autofocus: true,
                     focusNode: this._focusTitle,
+                    style: TextStyle(
+                      color: Color.fromRGBO(0, 156, 118, 1),
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                    ),             
                     validator: (title) {
                       if (title.isEmpty) {
                         return "Título";
@@ -91,8 +109,23 @@ class TaskScreenState extends State<TaskScreen> {
                     onSaved: (title) {
                       this._title = title;
                     },
-                    decoration: InputDecoration(hintText: "Título da tarefa", labelText: "Título", icon: Icon(Icons.title)),
+                    decoration: InputDecoration(
+                      hintText: "Título da tarefa", 
+                      labelText: "Título", 
+                      icon: Icon(Icons.title),
+                      labelStyle: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Inter',                        
+                      ),                      
+                      errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)),  
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(1, 43, 127, 1),
+                        ),
+                      ),
+                    ),
                   ),
+                  
                 ),
                 /* TF for Description */
                 Padding(
@@ -102,6 +135,11 @@ class TaskScreenState extends State<TaskScreen> {
                     textInputAction: TextInputAction.next,
                     autofocus: true,
                     focusNode: this._focusDescription,
+                    style: TextStyle(
+                      color: Color.fromRGBO(0, 156, 118, 1),
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                    ),
                     validator: (description) {
                       if (description.isEmpty) {
                         return "Descrição";
@@ -115,7 +153,21 @@ class TaskScreenState extends State<TaskScreen> {
                     onSaved: (description) {
                       this._description = description;
                     },
-                    decoration: InputDecoration(hintText: "Descrição da tarefa", labelText: "Descrição", icon: Icon(Icons.description)),
+                    decoration: InputDecoration(
+                      hintText: "Descrição da tarefa", 
+                      labelText: "Descrição", 
+                      icon: Icon(Icons.description),
+                      errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)), 
+                      labelStyle: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Inter',                        
+                      ), 
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(1, 43, 127, 1),
+                        )
+                      ),
+                    ),
                   ),
                 ),
                 /* TF for DeadLine */
@@ -126,6 +178,11 @@ class TaskScreenState extends State<TaskScreen> {
                     format: DateFormat("dd/MM/yyyy HH:mm"),
                     textInputAction: TextInputAction.next,
                     focusNode: _focusDeadLine,
+                    style: TextStyle(
+                      color: Color.fromRGBO(0, 156, 118, 1),
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                    ),
                     validator: (deadLine) {
                       if (deadLine == null) {
                         return "Prazo final";
@@ -138,12 +195,25 @@ class TaskScreenState extends State<TaskScreen> {
                     onSaved: (deadLine) {
                       this._deadLine = deadLine;
                     },
-                    inputDecoration: InputDecoration(hintText: "Prazo final", labelText: "Prazo"),
+                    inputDecoration: InputDecoration(
+                      hintText: "Prazo final", 
+                      labelText: "Prazo",
+                      errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.red)),                      
+                      labelStyle: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Inter',                        
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(1, 43, 127, 1),
+                        )
+                      ),
+                    ),
                   ),
                 ),                                
               ],
             ),
-          ),        
+          ),
           /* B for Saving */
           Padding(
             padding: const EdgeInsets.only(left: 30, right: 30, top: 15),
@@ -172,11 +242,12 @@ class TaskScreenState extends State<TaskScreen> {
                       ],
                     ),
                   ),                
-                  onPressed: () {              
+                  onPressed: () {   
+                    this._save();           
                   },
                   shape: const StadiumBorder(),                
                 ),
-          )          
+          ),
         ],
       ),
     );

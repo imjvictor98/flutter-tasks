@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:task/screens/Entry/entry.dart';
 import 'package:task/screens/Home/home.dart';
 import 'package:task/screens/Task/new_task.dart';
+import 'package:task/services/TaskService.dart';
 import 'package:task/services/UserService.dart';
+import 'package:task/stores/task/task_store.dart';
 import 'package:task/stores/user/user_store.dart';
 import 'package:task/utils/navigator.dart';
 
@@ -24,15 +26,21 @@ class MyApp extends StatelessWidget {
             userService.dispose();
           },
         ),
+        Provider<TaskService>(
+          create: (_) => TaskService(TaskStore()),
+          dispose: (ctx, taskService) {
+            taskService.dispose();
+          },
+        ),
       ],
       child: MaterialApp(
         title: "Tasks",        
         navigatorKey: NavigatorUtils.nav,
         initialRoute: "entry",
         routes: {
-          "entry": (context) => Entry(),
-          "home": (context) => HomeState(),
-          "new_task": (context) => TaskScreen(),
+          "entry": (context) => Entry(),  //Where user put his name
+          "home": (context) => HomeState(), //Where are task's user
+          "new_task": (context) => TaskScreen(), //Where user add a new task to a list
         },
         theme: ThemeData(
           backgroundColor: Colors.white,
