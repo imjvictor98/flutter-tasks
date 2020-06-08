@@ -59,7 +59,15 @@ class _HomePage extends State<HomeState> {
                 new Expanded(child: _renderListTasksUndone()),
               ],
             ),
-            _renderListTasksDone()
+            new Column(          
+              crossAxisAlignment: CrossAxisAlignment.start,                  
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(5.0),                  
+                ),
+                new Expanded(child: _renderListTasksDone()),
+              ],
+            )
           ]),
           bottomNavigationBar: new TabBar(tabs: [
             Tab(
