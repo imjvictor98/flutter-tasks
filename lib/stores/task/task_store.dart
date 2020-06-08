@@ -16,6 +16,11 @@ abstract class _TaskStore with Store {
     tasks.add(task);
   }
 
+  @action
+  setTasks(List<Task> t) {
+    this.tasks = t.asObservable();
+  }
+
   @computed
   int get amountTasks {
     return tasks.length;

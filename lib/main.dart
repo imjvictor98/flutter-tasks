@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task/screens/Entry/entry.dart';
@@ -15,38 +16,40 @@ void main() {
   runApp(MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(providers: [
-        Provider<UserService>(
-          create: (_) => UserService(UserStore()),
-          dispose: (ctx, userService) {
-            userService.dispose();
+    return BotToastInit(
+      child: MultiProvider(providers: [
+          Provider<UserService>(
+            create: (_) => UserService(UserStore()),
+            dispose: (ctx, userService) {
+              userService.dispose();
+            },
+          ),
+          Provider<TaskService>(
+            create: (_) => TaskService(TaskStore()),
+            dispose: (ctx, taskService) {
+              taskService.dispose();
+            },
+          ),
+        ],
+        child: MaterialApp(
+          title: "Tasks",  
+          navigatorObservers: [BotToastNavigatorObserver()],      
+          navigatorKey: NavigatorUtils.nav,
+          initialRoute: "entry",
+          routes: {
+            "entry": (context) => Entry(),  //Where user put his name
+            "home": (context) => HomeState(), //Where are task's user
+            "new_task": (context) => TaskScreen(), //Where user add a new task to a list
           },
-        ),
-        Provider<TaskService>(
-          create: (_) => TaskService(TaskStore()),
-          dispose: (ctx, taskService) {
-            taskService.dispose();
-          },
-        ),
-      ],
-      child: MaterialApp(
-        title: "Tasks",        
-        navigatorKey: NavigatorUtils.nav,
-        initialRoute: "entry",
-        routes: {
-          "entry": (context) => Entry(),  //Where user put his name
-          "home": (context) => HomeState(), //Where are task's user
-          "new_task": (context) => TaskScreen(), //Where user add a new task to a list
-        },
-        theme: ThemeData(
-          backgroundColor: Colors.white,
-          buttonTheme: ButtonThemeData(
-            buttonColor: Color.fromRGBO(1, 43, 127, 1),
-            textTheme: ButtonTextTheme.primary,            
+          theme: ThemeData(
+            backgroundColor: Colors.white,
+            buttonTheme: ButtonThemeData(
+              buttonColor: Color.fromRGBO(1, 43, 127, 1),
+              textTheme: ButtonTextTheme.primary,            
+            ),
           ),
         ),
       ),

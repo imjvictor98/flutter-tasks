@@ -31,7 +31,7 @@ class UserService {
     return Future.delayed(Duration(seconds: 2), ()  {
       String userStr = _preferences.getString("user");
 
-      User user = User.fromJson(jsonDecode(userStr));
+      User user = User.fromJson(jsonDecode(userStr)); 
 
       return user;
     });

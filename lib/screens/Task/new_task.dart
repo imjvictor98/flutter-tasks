@@ -59,6 +59,8 @@ class TaskScreenState extends State<TaskScreen> {
       print("Atividade adicionada"); //Substituir pelo toast
       Navigator.of(context).pop();
     });
+
+    _taskService.saveTasksList();
   }
 
   @override

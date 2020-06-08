@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task/screens/Home/home.dart';
 import 'package:task/services/UserService.dart';
-import 'package:task/stores/user/user_store.dart';
+import 'package:task/services/TaskService.dart';
+import 'package:task/utils/message.dart';
 
 
 
@@ -16,6 +17,7 @@ class Entry extends StatefulWidget {
 class _Entry extends State<Entry> {
   String _name = "";
   UserService _userService;
+  TaskService _taskService;
 
   @override
   void initState() {
@@ -26,23 +28,37 @@ class _Entry extends State<Entry> {
     try {
       _userService.login(_name).then((user){
         if (user == null) {
-          Scaffold.of(context).showSnackBar(SnackBar(
-           content: Text("User not registered!"),
-          ));          
+          showError("Usuário não registrado");
         }      
       }).catchError((onError){
         throw "Error on login!";
       });
     } catch (e) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text(e.toString()),
-      ));
+      showError(e.toString());
+    }
+  }
+
+    getTaskList() {
+    try {
+      _taskService.getTasksList().then((list) {
+        //print(list);
+        if (list == null) {          
+          print("Não há lista para ser recuperada.");          
+        } else {
+          showInfo("Lista recuperada");
+        }
+      }).catchError((onError) {
+        throw onError.toString();
+      });
+    } catch (e) {
+      print(e.toString());
     }
   }
 
   @override
   Widget build(BuildContext context) {
     _userService = Provider.of<UserService>(context);
+    _taskService = Provider.of<TaskService>(context);
 
     return Scaffold(
       body: Center(
@@ -130,6 +146,7 @@ class _Entry extends State<Entry> {
                 onPressed: () {
                   _login();
                   Navigator.push(context, MaterialPageRoute(builder: (context) => HomeState()));
+                  getTaskList();
                 },
                 shape: const StadiumBorder(),
                 

@@ -45,6 +45,16 @@ mixin _$TaskStore on _TaskStore, Store {
   }
 
   @override
+  dynamic setTasks(List<Task> t) {
+    final _$actionInfo = _$_TaskStoreActionController.startAction();
+    try {
+      return super.setTasks(t);
+    } finally {
+      _$_TaskStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     final string =
         'tasks: ${tasks.toString()},amountTasks: ${amountTasks.toString()}';

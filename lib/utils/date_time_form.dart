@@ -177,3 +177,11 @@ TimeOfDay _toTime(DateTime date) {
 }
 
 String _getMask(String datePattern) => datePattern.replaceAll(RegExp(r'([dD])|([mM])|([yY])|([hH])'), '0');
+
+DateTime dateFromJson(String json) {
+  if (json.contains(".")) {
+    json = json.substring(0, json.length - 1);
+  }
+
+  return DateTime.parse(json);
+}

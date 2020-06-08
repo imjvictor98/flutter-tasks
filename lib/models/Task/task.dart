@@ -1,11 +1,11 @@
 class Task {
-  final int id;
-  final String title;
-  final String description;
-  final DateTime deadLine;
-  final bool done;
+  int id;
+  String title;
+  String description;
+  DateTime deadLine;
+  bool done;
 
-
+  
   Task({this.id, this.title, this.description, this.deadLine, this.done});
 
     Map<String, Object> toJson() {
@@ -17,6 +17,7 @@ class Task {
       "done": this.done
     };
   }
+
 
   static fromJson(Map<String, Object> json) {
     return Task(
