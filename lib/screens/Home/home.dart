@@ -64,11 +64,11 @@ class _HomePage extends State<HomeState> {
           bottomNavigationBar: new TabBar(tabs: [
             Tab(
               icon: const Icon(Icons.calendar_today),
-              text: 'In Progress',
+              text: 'Pendentes',
             ),
             Tab(
               icon: const Icon(Icons.done_all),
-              text: 'Done',
+              text: 'Concluídas',
             ),
           ],
           labelColor: Color.fromRGBO(1, 43, 127, 1),
@@ -77,7 +77,7 @@ class _HomePage extends State<HomeState> {
           indicatorPadding: EdgeInsets.all(5.0),
           indicatorColor: Colors.greenAccent[400],
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Color.fromRGBO(246, 246, 246, 1),
           floatingActionButton: Observer(
             builder: (ctx) {
               if (_userService.userStore.user.name.length > 0) {
@@ -104,7 +104,102 @@ class _HomePage extends State<HomeState> {
         }
         
         var listFiltered = _taskService.taskStore.tasks.where((element) => !element.done).toList();
+        
+        if (listFiltered == null || listFiltered.isEmpty) {
+          return Center(child: Text("Sem tarefas em andamento para exibir"),);
+        }        
+        return ListView(                             
+          children: listFiltered.map((task) {                                                                   
+            return Card(                                 
+              elevation: 8.0,
+              margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+              shape: StadiumBorder(
+                side: BorderSide(                  
+                  style: BorderStyle.none,                  
+                )
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(246, 246, 246, 1),
+                  borderRadius: BorderRadius.only(
+                    topLeft:  const  Radius.circular(25.0),
+                    topRight: const  Radius.circular(25.0),
+                    bottomLeft: const  Radius.circular(25.0),
+                    bottomRight: const  Radius.circular(25.0),
+                  ),
+                ),
+                child: new ListTile(  
+                  onTap: () {                     
+                     setState(() {
+                      _taskService.setDone(task.id);  
+                     });
+                  },                                  
+                  enabled: true,                  
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  leading: Container(
+                    padding: EdgeInsets.only(left: 12.0, right: 12),
+                    
+                    child: Icon(
+                      Icons.calendar_today, 
+                      color: Color.fromRGBO(1, 43, 127, 1),
 
+                    ),                    
+                  ),
+                  title: Text(
+                    task.title,
+                    style: TextStyle(
+                      color: Color.fromRGBO(51, 51, 51, 1), 
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Inter'
+                    ),
+                  ),
+                                    
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[                      
+                      Text(
+                        task.description, 
+                        style: TextStyle(
+                          color: Color.fromRGBO(51, 51, 51, 1),
+                          fontFamily: 'Inter'
+                          ),
+                        ),  
+                      Text(
+                        "${DateFormat("dd/MM/yyyy HH:mm").format(task.deadLine)}",                         
+                        style: TextStyle(
+                          color: Color.fromRGBO(51, 51, 51, 1),
+                          ),
+                        ),
+                    ],
+                  ),
+                  trailing:
+                    Text(
+                      "Pendente", 
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),                  
+                ),
+              ),
+            );              
+          }).toList(),        
+        );
+      });
+  }
+
+  _renderListTasksDone() {
+    return Observer(builder: (ctx) {
+        if (_taskService.taskStore.tasks.isEmpty) {
+          return Center(child: Text("Sem tarefas para exibir"));
+        }
+        
+        var listFiltered = _taskService.taskStore.tasks.where((element) => element.done).toList();
+        
+        if (listFiltered == null || listFiltered.isEmpty) {
+          return Center(child: Text("Sem tarefas feitas para exibir"),);
+        }        
         return ListView(                             
           children: listFiltered.map((task) {                                                                   
             return Card(                                 
@@ -125,11 +220,7 @@ class _HomePage extends State<HomeState> {
                     bottomRight: const  Radius.circular(25.0),
                   ),
                 ),
-                child: new ListTile(  
-                  onTap: () {
-                     _taskService.setDone(task.id);
-                  },                
-                  onLongPress: () => print("task ${task.done}"),
+                child: new ListTile(                                  
                   enabled: true,                  
                   contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                   leading: Container(
@@ -138,7 +229,8 @@ class _HomePage extends State<HomeState> {
                     child: Icon(
                       Icons.calendar_today, 
                       color: Color.fromRGBO(1, 43, 127, 1),
-                    ),
+
+                    ),                    
                   ),
                   title: Text(
                     task.title,
@@ -158,9 +250,9 @@ class _HomePage extends State<HomeState> {
                           color: Color.fromRGBO(51, 51, 51, 1),
                           fontFamily: 'Inter'
                           ),
-                        ),                                            
+                        ),  
                       Text(
-                        "${DateFormat("dd/MM/yyyy HH:mm").format(task.deadLine)}",                         
+                        "Prazo encerrado",                         
                         style: TextStyle(
                           color: Color.fromRGBO(51, 51, 51, 1),
                           ),
@@ -168,66 +260,14 @@ class _HomePage extends State<HomeState> {
                     ],
                   ),
                   trailing:
-                    Icon(Icons.keyboard_arrow_right, color: Color.fromRGBO(1, 43, 127, 1), size: 30.0),                    
-                ),
-              ),
-            );              
-          }).toList(),        
-        );
-      });
-  }
-
-  _renderListTasksDone() {
-      return Observer(builder: (ctx) {
-        if (_taskService.taskStore.tasks.isEmpty) {
-          return Center(child: Text("Nenhum tarefa concluída para exibir"),);
-        }
-        
-        var listFiltered = _taskService.taskStore.tasks.where((element) => element.done).toList();
-
-        if (listFiltered.isEmpty || listFiltered == null) {
-          return Center(child: Text("Nenhum tarefa concluída para exibir"));
-        }
-
-        return ListView(                    
-          children: listFiltered.map((task) {                                                       
-            return Card(
-              elevation: 8.0,
-              margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-              child: Container(
-                decoration: BoxDecoration(color: Color.fromRGBO(64, 75, 96, .9),),
-                child: new ListTile(                                    
-                  enabled: true,                  
-                  contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                  leading: Container(
-                    padding: EdgeInsets.only(left: 12.0, right: 12),
-                    decoration: new BoxDecoration(
-                      border: new Border(
-                        right: new BorderSide(
-                          width: 1.0, 
-                          color: Colors.white24
-                        ),
+                    Text(
+                      "Concluida", 
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        color: Color.fromRGBO(0, 156, 118, 1),
+                        fontWeight: FontWeight.bold
                       ),
-                    ),
-                    child: Icon(
-                      Icons.calendar_today, 
-                      color: Colors.white
-                    ),
-                  ),
-                  title: Text(
-                    task.title,
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                                    
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[                      
-                      Text(task.description, style: TextStyle(color: Colors.white)),                                            
-                      Text("${DateFormat("dd/MM/yyyy HH:mm").format(task.deadLine)}", style: TextStyle(color: Colors.white))
-                    ],
-                  ),
-                  trailing:
-                    Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),                    
+                    ),                    
                 ),
               ),
             );              

@@ -27,7 +27,7 @@ class TaskService {
     return Future.value(task);
   }
 
-  setDone(int id) {
+  setDone(int id) async {
     var gt = taskStore.tasks.singleWhere((element) => (element.id == id));
     
     gt.done = !gt.done;
@@ -37,6 +37,9 @@ class TaskService {
     var index = taskStore.tasks.lastIndexOf(gt);
 
     taskStore.tasks[index] = gt;
+
+    saveTasksList();
+
   }
 
   Future<void> saveTasksList() async {
@@ -46,6 +49,7 @@ class TaskService {
 
     _preferences.setString("tasklist", encodedData);    
 
+    print("Salvo");
   }
 
   Future<List<Task>> getTasksList() async {
