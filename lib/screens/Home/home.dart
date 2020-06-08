@@ -34,7 +34,8 @@ class _HomePage extends State<HomeState> {
       color: Colors.yellow,      
       home: DefaultTabController(
         length: 2,
-        child: new Scaffold(          
+        child: new Scaffold(     
+
           appBar: AppBar(
             title: Text(
             "Bom Dia, ${_userService.userStore.user.name}", 
@@ -43,7 +44,7 @@ class _HomePage extends State<HomeState> {
               fontFamily: 'Inter'),
             ),
             backgroundColor: Color.fromRGBO(0, 156, 118, 1),
-            elevation: 5,
+            elevation: 5,            
           ),
           body: TabBarView(children: [          
             // Container(
@@ -69,16 +70,16 @@ class _HomePage extends State<HomeState> {
               ],
             )
           ]),
-          bottomNavigationBar: new TabBar(tabs: [
+          bottomNavigationBar: new TabBar(tabs: [            
             Tab(
               icon: const Icon(Icons.calendar_today),
-              text: 'Pendentes',
-            ),
+              text: 'Pendentes',              
+            ),                        
             Tab(
               icon: const Icon(Icons.done_all),
               text: 'Concluídas',
             ),
-          ],
+          ],                    
           labelColor: Color.fromRGBO(1, 43, 127, 1),
           unselectedLabelColor: Colors.blue[200],          
           indicatorSize: TabBarIndicatorSize.label,
@@ -200,15 +201,18 @@ class _HomePage extends State<HomeState> {
   _renderListTasksDone() {
     return Observer(builder: (ctx) {
         if (_taskService.taskStore.tasks.isEmpty) {
-          return Center(child: Text("Sem tarefas para exibir"));
+          return Center(
+            child: Text("Sem tarefas para exibir")
+          );
         }
         
         var listFiltered = _taskService.taskStore.tasks.where((element) => element.done).toList();
         
         if (listFiltered == null || listFiltered.isEmpty) {
           return Center(child: Text("Sem tarefas feitas para exibir"),);
-        }        
-        return ListView(                             
+        }
+
+        return ListView(                                       
           children: listFiltered.map((task) {                                                                   
             return Card(                                 
               elevation: 8.0,
