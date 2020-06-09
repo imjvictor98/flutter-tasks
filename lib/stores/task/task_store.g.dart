@@ -55,6 +55,26 @@ mixin _$TaskStore on _TaskStore, Store {
   }
 
   @override
+  dynamic removeTask(Task task) {
+    final _$actionInfo = _$_TaskStoreActionController.startAction();
+    try {
+      return super.removeTask(task);
+    } finally {
+      _$_TaskStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic editTask(Task task) {
+    final _$actionInfo = _$_TaskStoreActionController.startAction();
+    try {
+      return super.editTask(task);
+    } finally {
+      _$_TaskStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     final string =
         'tasks: ${tasks.toString()},amountTasks: ${amountTasks.toString()}';

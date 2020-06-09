@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task/screens/Entry/entry.dart';
 import 'package:task/screens/Home/home.dart';
+import 'package:task/screens/Task/edit_task.dart';
 import 'package:task/screens/Task/new_task.dart';
 import 'package:task/services/TaskService.dart';
 import 'package:task/services/UserService.dart';
@@ -10,7 +11,7 @@ import 'package:task/stores/task/task_store.dart';
 import 'package:task/stores/user/user_store.dart';
 import 'package:task/utils/navigator.dart';
 
-
+import 'models/Task/task.dart';
 
 void main() {
   runApp(MyApp());
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
             "entry": (context) => Entry(),  //Where user put his name
             "home": (context) => HomeState(), //Where are task's user
             "new_task": (context) => TaskScreen(), //Where user add a new task to a list
+            "edit_task": (context) => EditTaskScreen(),
           },
           theme: ThemeData(
             backgroundColor: Colors.white,

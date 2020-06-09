@@ -27,6 +27,12 @@ class TaskService {
     return Future.value(task);
   }
 
+  Future<Task> deleteTask(Task task) {
+    taskStore.removeTask(task);
+    
+    return Future.value(task);
+  }
+
   setDone(int id) async {
     var gt = taskStore.tasks.singleWhere((element) => (element.id == id));
     
@@ -39,6 +45,19 @@ class TaskService {
     taskStore.tasks[index] = gt;
 
     saveTasksList();
+
+  }
+
+  Future<Task> editTask(Task task) async {
+    var f = taskStore.tasks.singleWhere((element) => (element.id == task.id));
+
+    var index = taskStore.tasks.lastIndexOf(f);
+
+    taskStore.tasks[index] = task;
+
+    saveTasksList();
+    
+    return Future.value(task);
 
   }
 

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -8,21 +6,24 @@ import 'package:task/models/Task/task.dart';
 import 'package:task/services/TaskService.dart';
 import 'package:task/services/UserService.dart';
 import 'package:task/utils/date_time_form.dart';
+import 'package:task/utils/message.dart';
 
-class TaskScreen extends StatefulWidget {
+class EditTaskScreen extends StatefulWidget {
+  static Task task;
+
   @override
-  State<StatefulWidget> createState() => TaskScreenState();
+  State<StatefulWidget> createState() => EditTaskScreenState();
 }
 
-class TaskScreenState extends State<TaskScreen> {
+class EditTaskScreenState extends State<EditTaskScreen> {  
   final _formKey = GlobalKey<FormState>();
   UserService _userService;
   TaskService _taskService;
-
+  
   String _title;
   String _description;
   DateTime _deadLine;
-  bool _done = false;
+  //bool _done = false;
 
   FocusNode _focusTitle;
   FocusNode _focusDescription;
@@ -48,44 +49,36 @@ class TaskScreenState extends State<TaskScreen> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
     }
-
-    
     
     Task _task = Task(
-      id: _generateId(),
+      id: EditTaskScreen.task.id,
       title: this._title,
       description: this._description,
       deadLine: this._deadLine,
-      done: this._done
+      done: EditTaskScreen.task.done
     );
 
-    this._taskService.saveTask(_task).then((value) {
-      print("Atividade adicionada"); //Substituir pelo toast
+    
+
+    print(_task.title);
+
+    _taskService.editTask(_task).then((value){
+      showInfo("Tarefa atualizada!");
       Navigator.of(context).pop();
     });
 
-    _taskService.saveTasksList();
+
   }
 
-  int _generateId(){
-    var _id = new Random.secure().nextInt(1000);
-    var occurrences = _taskService.taskStore.tasks.where((element) => element.id == _id);
-
-    if (occurrences.length > 0) {
-      _id = new Random.secure().nextInt(1000);
-    }
-
-    return _id;
-  }
   @override
   Widget build(BuildContext context) {
     _userService = Provider.of<UserService>(context);
     _taskService = Provider.of<TaskService>(context);
-
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Bom Dia, ${_userService.userStore.user.name}", 
+          "Editar Atividade", 
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Inter'),
@@ -108,6 +101,7 @@ class TaskScreenState extends State<TaskScreen> {
                     textInputAction: TextInputAction.next,
                     autofocus: true,
                     focusNode: this._focusTitle,
+                    initialValue: EditTaskScreen.task.title,
                     style: TextStyle(
                       color: Color.fromRGBO(0, 156, 118, 1),
                       fontFamily: 'Inter',
@@ -152,6 +146,7 @@ class TaskScreenState extends State<TaskScreen> {
                     textInputAction: TextInputAction.next,
                     autofocus: true,
                     focusNode: this._focusDescription,
+                    initialValue: EditTaskScreen.task.description,
                     style: TextStyle(
                       color: Color.fromRGBO(0, 156, 118, 1),
                       fontFamily: 'Inter',
@@ -195,6 +190,7 @@ class TaskScreenState extends State<TaskScreen> {
                     format: DateFormat("dd/MM/yyyy HH:mm"),
                     textInputAction: TextInputAction.next,
                     focusNode: _focusDeadLine,
+                    initialValue: EditTaskScreen.task.deadLine,
                     style: TextStyle(
                       color: Color.fromRGBO(0, 156, 118, 1),
                       fontFamily: 'Inter',
@@ -247,7 +243,7 @@ class TaskScreenState extends State<TaskScreen> {
                           width: 10.0,
                         ),
                         Text(
-                          "Criar tarefa",
+                          "Salvar tarefa",
                           maxLines: 1,                      
                           style: TextStyle(
                             color: Colors.white,
@@ -260,7 +256,7 @@ class TaskScreenState extends State<TaskScreen> {
                     ),
                   ),                
                   onPressed: () {   
-                    this._save();           
+                    _save();                     
                   },
                   shape: const StadiumBorder(),                
                 ),

@@ -21,6 +21,16 @@ abstract class _TaskStore with Store {
     this.tasks = t.asObservable();
   }
 
+  @action
+  removeTask(Task task) {
+    tasks.remove(task);
+  }
+
+  @action editTask(Task task) {
+    var index = tasks.indexOf(task);
+    tasks[index] = task;
+  }
+
   @computed
   int get amountTasks {
     return tasks.length;
