@@ -2,6 +2,11 @@
 
 A new Flutter project.
 
+## Actions
+
+Os cards usam o slidable, então para as ações de crud, é so deslizar. 
+Para marcar uma tarefa como feita ou desfeita, somente toque no card.
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
