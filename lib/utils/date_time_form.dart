@@ -32,7 +32,7 @@ class DateTimeFormField extends FormField<DateTime> {
         this.initialValue,
         DateTime firstDate,
         DateTime lastDate,
-        bool autovalidate = false,
+        bool autoValidateMode = false,
         FocusNode focusNode,
         this.style,
         this.textAlign = TextAlign.start,
@@ -46,7 +46,7 @@ class DateTimeFormField extends FormField<DateTime> {
       : firstDate = firstDate ?? DateTime(1900),
         lastDate = lastDate ?? DateTime(2100),
         focusNode = focusNode ?? FocusNode(),
-        super(key: key, autovalidate: autovalidate, validator: validator, onSaved: onSaved, builder: (FormFieldState<DateTime> state) {});
+        super(key: key, validator: validator, onSaved: onSaved, builder: (FormFieldState<DateTime> state) {});
 
   @override
   FormFieldState<DateTime> createState() => _DateTimeFormFieldState();
@@ -110,7 +110,6 @@ class _DateTimeFormFieldState extends FormFieldState<DateTime> {
           autofocus: widget.autofocus,
           enabled: widget.enabled,
           textInputAction: widget.textInputAction,
-          autovalidate: widget.autovalidate,
           onFieldSubmitted: (value) {
             var date = _toDate(value, widget.format);
             if (widget.onFieldSubmitted != null) {
@@ -134,10 +133,12 @@ class _DateTimeFormFieldState extends FormFieldState<DateTime> {
             child: SizedBox(
               width: 45,
               height: 45,
-              child: RaisedButton(
-                  padding: EdgeInsets.all(0),
-                  elevation: 6,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+                  elevation: MaterialStateProperty.all(6),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+                ),
                   onPressed: () {
                     getDateTimeInput().then((dateTime) {
                       if (dateTime != null) _controller.updateText(widget.format.format(dateTime));

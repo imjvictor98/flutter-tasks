@@ -147,83 +147,83 @@ class _HomePage extends State<HomeState> {
                   ),
                 ),
                 child: new Slidable(
-                  actionPane: new SlidableDrawerActionPane(),
-                  actionExtentRatio: 0.25,
-                  child: new ListTile(  
-                    onTap: () {                     
-                      setState(() {
-                        _taskService.setDone(task.id);  
-                      });
-                    },                                  
-                    enabled: true,                  
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                    leading: Container(
-                      padding: EdgeInsets.only(left: 12.0, right: 12),
-                      
-                      child: Icon(
-                        Icons.calendar_today, 
-                        color: Color.fromRGBO(1, 43, 127, 1),
+                  endActionPane: new ActionPane(motion: const ScrollMotion(), children: [
+                    new ListTile(
+                      onTap: () {
+                        setState(() {
+                          _taskService.setDone(task.id);
+                        });
+                      },
+                      enabled: true,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                      leading: Container(
+                        padding: EdgeInsets.only(left: 12.0, right: 12),
 
-                      ),                    
-                    ),
-                    title: Text(
-                      task.title,
-                      style: TextStyle(
-                        color: Color.fromRGBO(51, 51, 51, 1), 
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Inter'
+                        child: Icon(
+                          Icons.calendar_today,
+                          color: Color.fromRGBO(1, 43, 127, 1),
+
+                        ),
                       ),
-                    ),
-                                      
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[                      
-                        Text(
-                          task.description, 
-                          style: TextStyle(
+                      title: Text(
+                        task.title,
+                        style: TextStyle(
                             color: Color.fromRGBO(51, 51, 51, 1),
+                            fontWeight: FontWeight.bold,
                             fontFamily: 'Inter'
-                            ),
-                          ),  
-                        Text(
-                          "${DateFormat("dd/MM/yyyy - HH:mm").format(task.deadLine)}",                         
-                          style: TextStyle(
-                            color: Color.fromRGBO(51, 51, 51, 1),
+                        ),
+                      ),
+
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            task.description,
+                            style: TextStyle(
+                                color: Color.fromRGBO(51, 51, 51, 1),
+                                fontFamily: 'Inter'
                             ),
                           ),
-                      ],
-                    ),
-                    trailing:
+                          Text(
+                            "${DateFormat("dd/MM/yyyy - HH:mm").format(task.deadLine)}",
+                            style: TextStyle(
+                              color: Color.fromRGBO(51, 51, 51, 1),
+                            ),
+                          ),
+                        ],
+                      ),
+                      trailing:
                       Text(
-                        "Pendente", 
+                        "Pendente",
                         style: TextStyle(
-                          fontFamily: 'Inter',
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold
+                            fontFamily: 'Inter',
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold
                         ),
-                      ),                  
-                  ),
-                    secondaryActions: <Widget>[
-                    new IconSlideAction(                      
-                      caption: 'Editar',                      
-                      color: Color.fromRGBO(0, 156, 118, 1),
-                      icon: Icons.edit,                      
-                      onTap: () {
+                      ),
+                    ),
+                  ],),
+                  startActionPane: ActionPane(motion: const ScrollMotion(), children: [
+                    new SlidableAction(
+                      label: 'Editar',
+                      backgroundColor: Color.fromRGBO(0, 156, 118, 1),
+                      icon: Icons.edit,
+                      onPressed: (BuildContext context) {
                         _onUpdate(task);
                       },
                     ),
-                    new IconSlideAction(
-                      caption: 'Excluir',
-                      color: Colors.red,
+                    new SlidableAction(
+                      label: 'Excluir',
+                      backgroundColor: Colors.red,
                       icon: Icons.delete_outline,
-                      onTap: () {
-                        _onDelete(task);
-                        setState(() {
-                          _taskService.saveTasksList();
-                        });
-                      },
+                        onPressed: (BuildContext context) {
+                          _onDelete(task);
+                          setState(() {
+                            _taskService.saveTasksList();
+                          });
+                        }
                     ),
-                  ],
+                  ],),
                 ),
               )
             );          
@@ -265,83 +265,83 @@ class _HomePage extends State<HomeState> {
                   ),
                 ),
                 child: new Slidable(
-                  actionPane: new SlidableDrawerActionPane(),
-                  actionExtentRatio: 0.25,
-                  child: new ListTile(  
-                    onTap: () {    
-                      setState(() {
-                        _taskService.setDone(task.id);
-                      });                                       
-                    },                                  
-                    enabled: true,                  
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                    leading: Container(
-                      padding: EdgeInsets.only(left: 12.0, right: 12),
-                      
-                      child: Icon(
-                        Icons.calendar_today, 
-                        color: Color.fromRGBO(1, 43, 127, 1),
+                  endActionPane: new ActionPane(motion: const ScrollMotion(), children: [
+                    new ListTile(
+                      onTap: () {
+                        setState(() {
+                          _taskService.setDone(task.id);
+                        });
+                      },
+                      enabled: true,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                      leading: Container(
+                        padding: EdgeInsets.only(left: 12.0, right: 12),
 
-                      ),                    
-                    ),
-                    title: Text(
-                      task.title,
-                      style: TextStyle(
-                        color: Color.fromRGBO(51, 51, 51, 1), 
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Inter'
+                        child: Icon(
+                          Icons.calendar_today,
+                          color: Color.fromRGBO(1, 43, 127, 1),
+
+                        ),
                       ),
-                    ),
-                                      
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[                      
-                        Text(
-                          task.description, 
-                          style: TextStyle(
+                      title: Text(
+                        task.title,
+                        style: TextStyle(
                             color: Color.fromRGBO(51, 51, 51, 1),
+                            fontWeight: FontWeight.bold,
                             fontFamily: 'Inter'
-                            ),
-                          ),  
-                        Text(
-                          "${DateFormat("dd/MM/yyyy - HH:mm").format(task.deadLine)}",                         
-                          style: TextStyle(
-                            color: Color.fromRGBO(51, 51, 51, 1),
+                        ),
+                      ),
+
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            task.description,
+                            style: TextStyle(
+                                color: Color.fromRGBO(51, 51, 51, 1),
+                                fontFamily: 'Inter'
                             ),
                           ),
-                      ],
-                    ),
-                    trailing:
+                          Text(
+                            "${DateFormat("dd/MM/yyyy - HH:mm").format(task.deadLine)}",
+                            style: TextStyle(
+                              color: Color.fromRGBO(51, 51, 51, 1),
+                            ),
+                          ),
+                        ],
+                      ),
+                      trailing:
                       Text(
-                        "Concluída", 
+                        "Concluída",
                         style: TextStyle(
-                          fontFamily: 'Inter',
-                          color: Color.fromRGBO(0, 156, 118, 1),
-                          fontWeight: FontWeight.bold
+                            fontFamily: 'Inter',
+                            color: Color.fromRGBO(0, 156, 118, 1),
+                            fontWeight: FontWeight.bold
                         ),
-                      ),                  
-                  ),
-                    secondaryActions: <Widget>[
-                    new IconSlideAction(                      
-                      caption: 'Editar',                      
-                      color: Color.fromRGBO(0, 156, 118, 1),
-                      icon: Icons.edit,                      
-                      onTap: () {
+                      ),
+                    ),
+                  ]),
+                  startActionPane: new ActionPane(motion: const ScrollMotion(), children: [
+                    new SlidableAction(
+                      label: 'Editar',
+                      backgroundColor: Color.fromRGBO(0, 156, 118, 1),
+                      icon: Icons.edit,
+                      onPressed: (BuildContext context) {
                         _onUpdate(task);
                       },
                     ),
-                    new IconSlideAction(
-                      caption: 'Excluir',
-                      color: Colors.red,
+                    new SlidableAction(
+                      label: 'Excluir',
+                      backgroundColor: Colors.red,
                       icon: Icons.delete_outline,
-                      onTap: () {
+                      onPressed: (BuildContext context) {
                         _onDelete(task);
                         setState(() {
                           _taskService.saveTasksList();
                         });
                       },
                     ),
-                  ],
+                  ]),
                 ),
               )
             );          

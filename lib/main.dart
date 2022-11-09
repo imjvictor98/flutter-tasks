@@ -10,6 +10,7 @@ import 'package:task/services/UserService.dart';
 import 'package:task/stores/task/task_store.dart';
 import 'package:task/stores/user/user_store.dart';
 import 'package:task/utils/navigator.dart';
+import 'package:flutter/src/material/text_theme.dart';
 
 import 'models/Task/task.dart';
 
@@ -21,8 +22,8 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BotToastInit(
-      child: MultiProvider(providers: [
+
+    return MultiProvider(providers: [
           Provider<UserService>(
             create: (_) => UserService(UserStore()),
             dispose: (ctx, userService) {
@@ -37,7 +38,8 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
-          title: "Tasks",  
+          title: "Tasks",
+          builder: BotToastInit(),
           navigatorObservers: [BotToastNavigatorObserver()],      
           navigatorKey: NavigatorUtils.nav,
           initialRoute: "entry",
@@ -51,12 +53,11 @@ class MyApp extends StatelessWidget {
             backgroundColor: Colors.white,
             buttonTheme: ButtonThemeData(
               buttonColor: Color.fromRGBO(1, 43, 127, 1),
-              textTheme: ButtonTextTheme.primary,            
+              textTheme: ButtonTextTheme.primary
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 
